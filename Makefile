@@ -31,7 +31,7 @@ run:
 	./$(TARGET)
 
 clean:
-	@rm -rf $(BINDIR) $(OBJDIR)
+	@rm -rf $(TARGET) $(OBJDIR)
 	@echo "Cleanup completed !"
 
 objclean:
