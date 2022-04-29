@@ -29,11 +29,12 @@ void display_array(double *array, const size_t n, const char *name);
 /********** Solving Time-Independent Schrodinger equation **********/
 
 /*
-    
+    Store data to plot in arrays. 
 */
 void store_data(double xdata[], double psidata[], double x, double y[], double f[], void *params_ptr);
 
 /*
+    Write data in file for gnuplot usage.
 */
 void write_data(FILE *data, double xdata[], double psidata[]);
 
