@@ -10,10 +10,8 @@ int main(int argc, char **argv) {
         hbar    1.05e-34 J.s 
 
         Pour simplifier les ordres de grandeurs, on prend :
-
         hbarc   en eV*nm, au lieu de hbar (c : célérité de la lumière)
         hbarc = 197 eV*nm;
-
         m       en MeV/c^2, au lieu de kg
         m_electron = 9.11e-31 kg = 0.511 MeV/c^2 = 511000 eV/c^2
     */

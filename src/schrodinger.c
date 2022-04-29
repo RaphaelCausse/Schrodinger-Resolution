@@ -38,7 +38,6 @@ void store_data(double xdata[], double psidata[], double x, double y[], double f
 
 void write_data(FILE *data, double xdata[], double psidata[]) {
     for (int i = 0; i < NB_PTS; i++) {
-        // fprintf(data, "%lf %lf\n", xdata[i], fabs(psidata[i]));
         fprintf(data, "%lf %lf\n", xdata[i], psidata[i]);
     }
     fprintf(data, "\n");
@@ -46,15 +45,34 @@ void write_data(FILE *data, double xdata[], double psidata[]) {
 
 void plot_gnuplot(int mode) {
     char *cmds_gnuplot[NB_CMDS] = {};
-    cmds_gnuplot[0] = "set terminal jpeg size 1920,1080";
-    cmds_gnuplot[2] = "set title \"Psi en fonction de x\"";
-    cmds_gnuplot[3] = "set xlabel \"x\"";
-    cmds_gnuplot[4] = "set ylabel \"Psi\"";
-
+    cmds_gnuplot[0] = "set terminal pngcairo size 1920,1080";
+    cmds_gnuplot[2] = "set multiplot layout 3,2";
+    cmds_gnuplot[3] = "set offset 0,0,graph 0.05, graph 0.05";
+    cmds_gnuplot[4] = "set tmargin 2";
+    cmds_gnuplot[6] = "set title \"Niveau d'énergie 5\"";
+    cmds_gnuplot[7] = "set xlabel \"x dans [0,L]\"";
+    cmds_gnuplot[8] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[10] = "set title \"Niveau d'énergie 4\"";
+    cmds_gnuplot[11] = "set xlabel \"x dans [0,L]\"";
+    cmds_gnuplot[12] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[14] = "set title \"Niveau d'énergie 3\"";
+    cmds_gnuplot[15] = "set xlabel \"x dans [0,L]\"";
+    cmds_gnuplot[16] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[18] = "set title \"Niveau d'énergie 2\"";
+    cmds_gnuplot[19] = "set xlabel \"x dans [0,L]\"";
+    cmds_gnuplot[20] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[22] = "set title \"Niveau d'énergie 1\"";
+    cmds_gnuplot[23] = "set xlabel \"x dans [0,L]\"";
+    cmds_gnuplot[24] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[26] = "unset multiplot";
     switch (mode) {
     case 0:     //Infinite potential well
-        cmds_gnuplot[1] = "set output \"plot/puit_inifini.jpeg\"";
-        cmds_gnuplot[5] = "plot \"data/puit_infini.dat\" w l title \"Psi(x)\"";                                 
+        cmds_gnuplot[1] = "set output \"plot/puit_inifini.png\"";
+        cmds_gnuplot[9] = "plot \"data/puit_infini5.dat\" w l title \"Psi(x)\"";                                 
+        cmds_gnuplot[13] = "plot \"data/puit_infini4.dat\" w l title \"Psi(x)\"";
+        cmds_gnuplot[17] = "plot \"data/puit_infini3.dat\" w l title \"Psi(x)\"";
+        cmds_gnuplot[21] = "plot \"data/puit_infini2.dat\" w l title \"Psi(x)\"";
+        cmds_gnuplot[25] = "plot \"data/puit_infini1.dat\" w l title \"Psi(x)\"";
         break;
     case 1:     //
         break;
@@ -72,7 +90,7 @@ void plot_gnuplot(int mode) {
         fprintf(setup_gnuplot, "%s\n", cmds_gnuplot[i]);
     }
     fclose(setup_gnuplot);
-    system("gnuplot -p < data/setup.dat");
+    system("gnuplot -p < data/setup.dat 2> /dev/null");
 }
 
 void euler_method(double x, double y[], double f[], void *params_ptr) {
@@ -100,16 +118,14 @@ void euler_method(double x, double y[], double f[], void *params_ptr) {
 }
 
 void solve_euler(_Psi *p, double psi, double dpsi, double m, double E, double V, double xmin, double xmax) {
-    double h = xmax/NB_PTS;         //Increment step for solving the system
-    double k = 2*m/(HBARC*HBARC);   //Parameter of the differential equation
+    double h = xmax/NB_PTS;             //Increment step for solving the system
+    double k = 2*m/(HBARC*HBARC);       //Parameter of the differential equation
     double params[5] = {xmax, h, k, E, V};                 
-    
-    double N = 0.0;
-    double y[3] = {psi, dpsi, N};
-
+    double N = 0.0;                     //Normalisation function at x=0
+    double y[3] = {psi, dpsi, N};       //Vector Y to solve the ODE system
     double ddpsi = (-k)*(E-V)*psi;
-    double dN = psi*psi;
-    double f[3] = {dpsi, ddpsi, dN};
+    double dN = psi*psi;                //Derivative of normalisation function
+    double f[3] = {dpsi, ddpsi, dN};    //Vector Y' to solve the ODE system
 
     euler_method(xmin, y, f, &params);
     //If normalisation isn't checked, change dspi to make N close to 1
@@ -128,7 +144,6 @@ void infinite_potential_well(double m, double L, double E) {
     double V = 0.0;                 //Potential inside the well
     double xmin = 0.0, xmax = L;
     double psi = 0.0, dpsi = 1.0;
-    
     double dpsi_n[5] = {0.0};       //Array of solutions dpsi
     double E_n[5] = {0.0};          //Array of quantifiable energy levels
     int count = 0; 
@@ -137,7 +152,7 @@ void infinite_potential_well(double m, double L, double E) {
     double psi_xmax = 1.0;
     _Psi *p = (_Psi *)calloc(1, sizeof(_Psi));
     while (count < 5) {
-        while (fabs(psi_xmax) > 2e-4) {
+        while (fabs(psi_xmax) > 0.8e-4) {
             E += dE;
             solve_euler(p, psi, dpsi, m, E, V, xmin, xmax);
             psi_xmax = p->psi;
@@ -147,17 +162,24 @@ void infinite_potential_well(double m, double L, double E) {
         E_n[count] = E;
         count++;
     }
+    /* Tests
     display_array(E_n, 5, "All 5 E");
     display_array(dpsi_n, 5, "All 5 dpsi");
-    //Generating graphs using gnuplot
-    FILE *data = fopen("data/puit_infini.dat", "w");
-    if (!data) {
-        fprintf(stderr, "Error, failed to open %s\n", "data/puit_infini.dat");
+    */
+    //Generating graphs using gnuplot for 5 first energy levels
+    FILE *data1 = fopen("data/puit_infini1.dat", "w");
+    FILE *data2 = fopen("data/puit_infini2.dat", "w");
+    FILE *data3 = fopen("data/puit_infini3.dat", "w");
+    FILE *data4 = fopen("data/puit_infini4.dat", "w");
+    FILE *data5 = fopen("data/puit_infini5.dat", "w");
+    FILE *all_data_files[] = {data1, data2, data3, data4, data5};
+    if (!data1 && !data2 && !data3 && !data4 && !data5) {
+        fprintf(stderr, "Error, failed to open data files\n");
         exit(EXIT_FAILURE);
     }
     double h = xmax/NB_PTS;
     double k = 2*m/(HBARC*HBARC);
-    //Store all data for each solution (E, dpsi)
+    //Store data for each solution (E, dpsi) in a data file
     for (int i = 0; i < 5; i++) {
         double ddpsi = (-k)*(E_n[i]-V)*psi;
         double xdata[NB_PTS] = {0.0};
@@ -166,12 +188,13 @@ void infinite_potential_well(double m, double L, double E) {
         double f[2] = {dpsi_n[i], ddpsi};
         double params[5] = {xmax, h, k, E_n[i], V};
         store_data(xdata, psidata, xmin, y, f, &params);
-        //Write all data in temporary file
-        write_data(data, xdata, psidata);   
+        //Write data in temporary file
+        write_data(all_data_files[i], xdata, psidata);
     }
-    fclose(data);
+    for (int i = 0; i < 5; i++) {
+        fclose(all_data_files[i]);
+    }
     plot_gnuplot(0);
-    printf("Successfully plot to file [plot/puit_infini.jpeg]\n");
-
+    printf("Successfully plot all graphs to file [plot/puit_infini.jpeg] !\n");
     free(p);
 }

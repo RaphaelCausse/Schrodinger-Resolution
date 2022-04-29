@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#define NB_CMDS     6      //Number of gnuplot commands
+#define NB_CMDS     27      //Number of gnuplot commands
 #define NB_PTS      1000   //Number of subdivision of interval [xmin, xmax]
 #define HBARC       197    //hbar*c in eV*nm (see main.c for explanations)
 
