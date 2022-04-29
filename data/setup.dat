@@ -1,0 +1,27 @@
+set terminal pngcairo size 1920,1080
+set output "plot/puit_inifini.png"
+set multiplot layout 3,2
+set offset 0,0,graph 0.05, graph 0.05
+set tmargin 2
+(null)
+set title "Niveau d'énergie 5"
+set xlabel "x dans [0,L]"
+set ylabel "Psi(x)"
+plot "data/puit_infini5.dat" w l title "Psi(x)"
+set title "Niveau d'énergie 4"
+set xlabel "x dans [0,L]"
+set ylabel "Psi(x)"
+plot "data/puit_infini4.dat" w l title "Psi(x)"
+set title "Niveau d'énergie 3"
+set xlabel "x dans [0,L]"
+set ylabel "Psi(x)"
+plot "data/puit_infini3.dat" w l title "Psi(x)"
+set title "Niveau d'énergie 2"
+set xlabel "x dans [0,L]"
+set ylabel "Psi(x)"
+plot "data/puit_infini2.dat" w l title "Psi(x)"
+set title "Niveau d'énergie 1"
+set xlabel "x dans [0,L]"
+set ylabel "Psi(x)"
+plot "data/puit_infini1.dat" w l title "Psi(x)"
+unset multiplot
