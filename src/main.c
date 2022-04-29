@@ -18,11 +18,11 @@ int main(int argc, char **argv) {
         m_electron = 9.11e-31 kg = 0.511 MeV/c^2 = 511000 eV/c^2
     */
 
-    double m = 511000.0;   //Masse de l'electron, en eV/c^2
+    double m = 511000.0;  //Masse de l'electron, en eV/c^2
     double L = 1.0;       //Largeur du puit, en nm (1e-9 m)
     double E = 0.0;       //Energie de la particule, en eV
 
-    // Resolution : Cas du puit de potentiel infini
-    puit_potentiel_infini(m, L, E);
+    // Solving : cas of infinte potential well
+    infinite_potential_well(m, L, E);
     return 0;
 }

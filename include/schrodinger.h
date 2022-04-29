@@ -3,9 +3,9 @@
 
 #include <common.h>
 
-#define NB_CMDS     6      //Nombre de commandes gnuplot
-#define NB_PTS      100    //Nombre de subdivision de [xmin, xmax]
-#define HBARC       197    //hbar*c en eV*nm (voir main.c pour les explications)
+#define NB_CMDS     6      //Number of gnuplot commands
+#define NB_PTS      1000   //Number of subdivision of interval [xmin, xmax]
+#define HBARC       197    //hbar*c in eV*nm (see main.c for explanations)
 
 typedef struct _psi {
     double psi;
@@ -21,14 +21,15 @@ typedef struct _solve {
 /********** Utils **********/
 
 /*  
-    Affiche un tableau de taille n.
+    Display an array of length n.
 */
 void display_array(double *array, const size_t n, const char *name);
 
 
-/********** Resolution de l'equation de Schrodinger independante du temps **********/
+/********** Solving Time-Independent Schrodinger equation **********/
 
 /*
+    
 */
 void store_data(double xdata[], double psidata[], double x, double y[], double f[], void *params_ptr);
 
@@ -37,24 +38,24 @@ void store_data(double xdata[], double psidata[], double x, double y[], double f
 void write_data(FILE *data, double xdata[], double psidata[]);
 
 /*
-    Plot graphiques de donnees avec gnuplot.
-    mode 0: puit de potentiel infini
+    Plot data graphs using gnuplot
+    mode 0: infinte potential well
 */
 void plot_gnuplot(int mode);
 
 /*
-    Methode d'Euler pour resoudre une eq diff.
+    Euler's method to solve differential equation.
 */
 void euler_method(double x, double y[], double f[], void *params_ptr);
 
 /*
-    Resolution du systeme avec condition de normalisation, en utilisant la methode d'Euler.
+    Solve ODE system with normalisaiton condition, using Euler's method.
 */
 void solve_euler(_Psi *p, double psi, double dpsi, double m, double E, double V, double xmin, double xmax);
 
 /*
-    Resolution dans le cas du puit de potentiel infini.
+    Solve case of infinite potential well.
 */
-void puit_potentiel_infini(double m, double L, double E);
+void infinite_potential_well(double m, double L, double E);
 
 #endif
