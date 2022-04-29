@@ -4,13 +4,50 @@
 # SCHRODINGER-RESOLUTION
 
 Solving Time-Independant Schrodinger Equation in C.
+
+Graphs generation using gnuplot.
 <br><br>
 
 ## INSTALLATION
 
+**! For Linux based systems only !**
+<br><br>
+Install **make**
+
+Install **gnuplot** and **gsl** with your package manager:
+
+* For Ubuntu
+```
+sudo apt install gnuplot
+sudo apt install gsl
+```
+* For Manjaro
+```
+sudo pacman -S gnuplot
+sudo pacman -S gsl
+```
+* ForMacOS
+```
+brew install gnuplot
+brew install gsl
+```
+<br>
+
+## COMPILATION
+
+**Compile** the project using my Makefile :
+```
+make
+```
+<br>
 
 ## EXECUTION
 
+**Run** the executable using my Makefile :
+```
+make run
+```
+<br>
 
 ## AUTHORS
 
