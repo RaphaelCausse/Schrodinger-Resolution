@@ -22,5 +22,8 @@ int main(int argc, char **argv) {
 
     // Solving : cas of infinte potential well
     infinite_potential_well(m, L, E);
+
+    // Solving :
+    // Solving :
     return 0;
 }

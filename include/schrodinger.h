@@ -4,8 +4,8 @@
 #include <common.h>
 
 #define NB_CMDS     27      //Number of gnuplot commands
-#define NB_PTS      1000   //Number of subdivision of interval [xmin, xmax]
-#define HBARC       197    //hbar*c in eV*nm (see main.c for explanations)
+#define NB_PTS      1000    //Number of subdivision of interval [xmin, xmax]
+#define HBARC       197     //hbar*c in eV*nm (see main.c for explanations)
 
 typedef struct _psi {
     double psi;
@@ -39,10 +39,10 @@ void store_data(double xdata[], double psidata[], double x, double y[], double f
 void write_data(FILE *data, double xdata[], double psidata[]);
 
 /*
-    Plot data graphs using gnuplot
+    Plot data graphs using gnuplot.
     mode 0: infinte potential well
 */
-void plot_gnuplot(int mode);
+void plot_gnuplot(int mode, double *E_n);
 
 /*
     Euler's method to solve differential equation.

@@ -43,30 +43,32 @@ void write_data(FILE *data, double xdata[], double psidata[]) {
     fprintf(data, "\n");
 }
 
-void plot_gnuplot(int mode) {
+void plot_gnuplot(int mode, double *E_n) {
+    //Common commands for gnuplot
     char *cmds_gnuplot[NB_CMDS] = {};
     cmds_gnuplot[0] = "set terminal pngcairo size 1920,1080";
     cmds_gnuplot[2] = "set multiplot layout 3,2";
     cmds_gnuplot[3] = "set offset 0,0,graph 0.05, graph 0.05";
     cmds_gnuplot[4] = "set tmargin 2";
-    cmds_gnuplot[6] = "set title \"Niveau d'énergie 5\"";
+    cmds_gnuplot[6] = "set title \"Niveau d'énergie";
     cmds_gnuplot[7] = "set xlabel \"x dans [0,L]\"";
     cmds_gnuplot[8] = "set ylabel \"Psi(x)\"";
-    cmds_gnuplot[10] = "set title \"Niveau d'énergie 4\"";
+    cmds_gnuplot[10] = "set title \"Niveau d'énergie";
     cmds_gnuplot[11] = "set xlabel \"x dans [0,L]\"";
     cmds_gnuplot[12] = "set ylabel \"Psi(x)\"";
-    cmds_gnuplot[14] = "set title \"Niveau d'énergie 3\"";
+    cmds_gnuplot[14] = "set title \"Niveau d'énergie";
     cmds_gnuplot[15] = "set xlabel \"x dans [0,L]\"";
     cmds_gnuplot[16] = "set ylabel \"Psi(x)\"";
-    cmds_gnuplot[18] = "set title \"Niveau d'énergie 2\"";
+    cmds_gnuplot[18] = "set title \"Niveau d'énergie";
     cmds_gnuplot[19] = "set xlabel \"x dans [0,L]\"";
     cmds_gnuplot[20] = "set ylabel \"Psi(x)\"";
-    cmds_gnuplot[22] = "set title \"Niveau d'énergie 1\"";
+    cmds_gnuplot[22] = "set title \"Niveau d'énergie";
     cmds_gnuplot[23] = "set xlabel \"x dans [0,L]\"";
     cmds_gnuplot[24] = "set ylabel \"Psi(x)\"";
     cmds_gnuplot[26] = "unset multiplot";
     switch (mode) {
-    case 0:     //Infinite potential well
+    //Infinite potential well
+    case 0:
         cmds_gnuplot[1] = "set output \"plot/puit_inifini.png\"";
         cmds_gnuplot[9] = "plot \"data/puit_infini5.dat\" w l title \"Psi(x)\"";                                 
         cmds_gnuplot[13] = "plot \"data/puit_infini4.dat\" w l title \"Psi(x)\"";
@@ -74,9 +76,11 @@ void plot_gnuplot(int mode) {
         cmds_gnuplot[21] = "plot \"data/puit_infini2.dat\" w l title \"Psi(x)\"";
         cmds_gnuplot[25] = "plot \"data/puit_infini1.dat\" w l title \"Psi(x)\"";
         break;
-    case 1:     //
+    //
+    case 1:
         break;
-    case 2:     //
+    //
+    case 2:
         break;
     default: break;
     }
@@ -86,8 +90,14 @@ void plot_gnuplot(int mode) {
         exit(EXIT_FAILURE);
     }
     //Writing gnuplot commands un setup file
+    int e = 5;
     for (int i = 0; i < NB_CMDS; i++) {
-        fprintf(setup_gnuplot, "%s\n", cmds_gnuplot[i]);
+        if (i == 6 || i == 10 || i == 14 || i == 18 || i == 22) {
+            fprintf(setup_gnuplot, "%s E%i = %lf eV\"\n", cmds_gnuplot[i], e, E_n[e-1]);
+            e--;
+        } else {
+            fprintf(setup_gnuplot, "%s\n", cmds_gnuplot[i]);
+        }
     }
     fclose(setup_gnuplot);
     system("gnuplot -p < data/setup.dat 2> /dev/null");
@@ -118,18 +128,18 @@ void euler_method(double x, double y[], double f[], void *params_ptr) {
 }
 
 void solve_euler(_Psi *p, double psi, double dpsi, double m, double E, double V, double xmin, double xmax) {
-    double h = xmax/NB_PTS;             //Increment step for solving the system
+    double h = xmax/NB_PTS;             //Increment step to solve the system
     double k = 2*m/(HBARC*HBARC);       //Parameter of the differential equation
-    double params[5] = {xmax, h, k, E, V};                 
+    double params[5] = {xmax, h, k, E, V};  //Parameters of the differential equation               
     double N = 0.0;                     //Normalisation function at x=0
     double y[3] = {psi, dpsi, N};       //Vector Y to solve the ODE system
-    double ddpsi = (-k)*(E-V)*psi;
+    double ddpsi = (-k)*(E-V)*psi;      //Second derivative of psi(x)
     double dN = psi*psi;                //Derivative of normalisation function
     double f[3] = {dpsi, ddpsi, dN};    //Vector Y' to solve the ODE system
 
     euler_method(xmin, y, f, &params);
     //If normalisation isn't checked, change dspi to make N close to 1
-    if (fabs(y[2])-1 < 1e-4) {
+    if (fabs(y[2])-1 < 1e-6) {
         //dpsi = 1/sqrt(N)
         f[0] = fabs(1/sqrtf(y[2]));
         y[1] = f[0];
@@ -140,7 +150,7 @@ void solve_euler(_Psi *p, double psi, double dpsi, double m, double E, double V,
 }
 
 void infinite_potential_well(double m, double L, double E) {
-    double dE = 1e-4;               //Increment step for energy
+    double dE = 0.8e-4;             //Increment step for energy
     double V = 0.0;                 //Potential inside the well
     double xmin = 0.0, xmax = L;
     double psi = 0.0, dpsi = 1.0;
@@ -194,7 +204,7 @@ void infinite_potential_well(double m, double L, double E) {
     for (int i = 0; i < 5; i++) {
         fclose(all_data_files[i]);
     }
-    plot_gnuplot(0);
+    plot_gnuplot(0, E_n);
     printf("Successfully plot all graphs to file [plot/puit_infini.jpeg] !\n");
     free(p);
 }
