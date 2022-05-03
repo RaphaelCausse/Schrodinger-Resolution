@@ -49,6 +49,14 @@ make run
 ```
 <br>
 
+## FEATURES
+
+**Clean** the entire project directory :
+```
+make clean
+```
+<br>
+
 ## AUTHORS
 
 Raphael CAUSSE, from CY TECH.<br>
