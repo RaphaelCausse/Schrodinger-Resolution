@@ -26,7 +26,7 @@ sudo apt install gsl
 sudo pacman -S gnuplot
 sudo pacman -S gsl
 ```
-* ForMacOS
+* For MacOS
 ```
 brew install gnuplot
 brew install gsl
