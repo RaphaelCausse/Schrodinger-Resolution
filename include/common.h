@@ -4,9 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gsl/gsl_math.h>
-// #include <gsl/gsl_errno.h>
-// #include <gsl/gsl_vector.h>
-// #include <gsl/gsl_odeiv2.h>
 #include <gsl/gsl_const_mksa.h>
 
 #endif

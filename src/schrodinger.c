@@ -50,31 +50,32 @@ void plot_gnuplot(int mode, double *E_n) {
     cmds_gnuplot[2] = "set multiplot layout 3,2";
     cmds_gnuplot[3] = "set offset 0,0,graph 0.05, graph 0.05";
     cmds_gnuplot[4] = "set tmargin 2";
+    cmds_gnuplot[5] = "set terminal postscript eps enhanced\n";
     cmds_gnuplot[6] = "set title \"Niveau d'énergie";
     cmds_gnuplot[7] = "set xlabel \"x dans [0,L]\"";
-    cmds_gnuplot[8] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[8] = "set ylabel \"{/Symbol f}(x)\"";
     cmds_gnuplot[10] = "set title \"Niveau d'énergie";
     cmds_gnuplot[11] = "set xlabel \"x dans [0,L]\"";
-    cmds_gnuplot[12] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[12] = "set ylabel \"{/Symbol f}(x)\"";
     cmds_gnuplot[14] = "set title \"Niveau d'énergie";
     cmds_gnuplot[15] = "set xlabel \"x dans [0,L]\"";
-    cmds_gnuplot[16] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[16] = "set ylabel \"{/Symbol f}(x)\"";
     cmds_gnuplot[18] = "set title \"Niveau d'énergie";
     cmds_gnuplot[19] = "set xlabel \"x dans [0,L]\"";
-    cmds_gnuplot[20] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[20] = "set ylabel \"{/Symbol f}(x)\"";
     cmds_gnuplot[22] = "set title \"Niveau d'énergie";
     cmds_gnuplot[23] = "set xlabel \"x dans [0,L]\"";
-    cmds_gnuplot[24] = "set ylabel \"Psi(x)\"";
+    cmds_gnuplot[24] = "set ylabel \"{/Symbol f}(x)\"";
     cmds_gnuplot[26] = "unset multiplot";
     switch (mode) {
     //Infinite potential well
     case 0:
         cmds_gnuplot[1] = "set output \"plot/puit_inifini.png\"";
-        cmds_gnuplot[9] = "plot \"data/puit_infini5.dat\" w l title \"Psi(x)\"";                                 
-        cmds_gnuplot[13] = "plot \"data/puit_infini4.dat\" w l title \"Psi(x)\"";
-        cmds_gnuplot[17] = "plot \"data/puit_infini3.dat\" w l title \"Psi(x)\"";
-        cmds_gnuplot[21] = "plot \"data/puit_infini2.dat\" w l title \"Psi(x)\"";
-        cmds_gnuplot[25] = "plot \"data/puit_infini1.dat\" w l title \"Psi(x)\"";
+        cmds_gnuplot[9] = "plot \"data/puit_infini5.dat\" w l lt rgb \"red\" title \"{/Symbol f}(x)\"";                                 
+        cmds_gnuplot[13] = "plot \"data/puit_infini4.dat\" w l lt rgb \"red\" title \"{/Symbol f}(x)\"";
+        cmds_gnuplot[17] = "plot \"data/puit_infini3.dat\" w l lt rgb \"red\" title \"{/Symbol f}(x)\"";
+        cmds_gnuplot[21] = "plot \"data/puit_infini2.dat\" w l lt rgb \"red\" title \"{/Symbol f}(x)\"";
+        cmds_gnuplot[25] = "plot \"data/puit_infini1.dat\" w l lt rgb \"red\" title \"{/Symbol f}(x)\"";
         break;
     //
     case 1:
